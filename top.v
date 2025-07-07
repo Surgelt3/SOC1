@@ -1,4 +1,4 @@
-module AXI_BAR();
+module top();
 
     wire dBus_cmd_valid, dBus_cmd_ready, dBus_cmd_payload_wr, dBus_cmd_payload_uncached;
     wire [31:0] dBus_cmd_payload_address, dBus_cmd_payload_data;

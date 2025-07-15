@@ -1,5 +1,7 @@
 module top(
-    input clk, reset
+    input clk, reset,
+    input uart_rx, 
+    output uart_tx
 );
 
     // Master AW
@@ -58,7 +60,9 @@ module top(
     wire [1:0] s_rresp0, s_rresp1, s_rresp2, s_rresp3, s_rresp4;
     wire s_rlast0, s_rlast1, s_rlast2, s_rlast3, s_rlast4, s_rvalid0, s_rvalid1, s_rvalid2, s_rvalid3, s_rvalid4;
     wire s_rready0, s_rready1, s_rready2, s_rready3, s_rready4;
-
+    
+    wire uart_irq;
+    
     axi_vexriscv_master master0(
         clk, reset,
         // Master AW
@@ -88,7 +92,8 @@ module top(
         m_rready,
         m_rdata, 
         m_rresp,
-        m_rlast, m_rvalid
+        m_rlast, m_rvalid,
+        uart_irq
     );
     
     axi_xbar Axi_xbar (
@@ -165,7 +170,7 @@ module top(
     axi_uartlite_0 Uart_slave(
         clk,
         reset,
-        , //add interupt
+        uart_irq, //add interupt
         s_awaddr2, //inputs
         s_awvalid2, //input
         s_awready2, //output
@@ -183,18 +188,21 @@ module top(
         s_rresp2, //output
         s_rvalid2, //output
         s_rready2, //input
-        , //rx
-        //tx
+        uart_rx, //rx
+        uart_tx//tx
     );
 
 
     bram boot_ram(
-        clk, 
+        clk, reset,
         s_araddr0,
         s_arvalid0, s_rready0,
         s_rdata0,
+        s_rresp0,
         s_arready0, s_rvalid0
     );
+    
+
 
 
 

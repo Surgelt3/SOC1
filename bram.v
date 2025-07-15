@@ -1,12 +1,15 @@
 module bram(
-    input clk, 
+    input clk, reset,
     input [31:0] s_araddr,
     input s_arvalid, s_rready,
     output reg [31:0] s_rdata,
+    output [1:0] s_rresp,
     output reg s_arready, s_rvalid
 );
 
     reg [31:0] mem [0:65536];
+    
+    assign s_rresp = 2'b00;
     
     initial $readmemh("boot.hex", mem);
     
